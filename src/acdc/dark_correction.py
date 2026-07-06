@@ -82,11 +82,14 @@ class Acdc():
         self.segment = segment 
         if hv is not None:
             hv = int(hv)
-        self.hv = hv 
-        now = datetime.datetime.now()
-        self.x1d_outdir = os.path.join(darkcorr_outdir, f"cal_{now.strftime('%d%b%Y')}")
+        self.hv = hv
+        if x1d_outdir is None:
+            x1d_outdir = os.path.join(darkcorr_outdir, "x1ds/")
+        self.x1d_outdir = x1d_outdir
         if not os.path.exists(darkcorr_outdir):
             os.makedirs(darkcorr_outdir)
+        if not os.path.exists(x1d_outdir):
+            os.makedirs(x1d_outdir)
         corrtags = glob.glob(os.path.join(indir, "*corrtag*fits"))
         self.corr_dict = self.sort_corrtags(corrtags)
         self.dark_dict = self.get_best_superdarks(superdarks)
@@ -205,10 +208,10 @@ class Acdc():
         for item in self.custom_corrtags:
             with fits.open(item, mode="update") as hdulist:
                 hdr0 = hdulist[0].header
-                hdr0.set("xtrctalg", "BOXCAR")
-                hdr0.set("backcorr", "OMIT")
-                hdr0.set("trcecorr", "OMIT")
-                hdr0.set("algncorr", "OMIT")
+                # hdr0.set("xtrctalg", "BOXCAR")
+                hdr0.set("backcorr", "ACDC")
+                # hdr0.set("trcecorr", "OMIT")
+                # hdr0.set("algncorr", "OMIT")
 
         calibrated = []
         for item in self.custom_corrtags:
@@ -227,7 +230,6 @@ class Acdc():
             elif len(wildcard_products) >= 1 and self.overwrite is False:
                 print(f"WARNING: Products already exist and overwrite is False, skipping...")
                 continue
-
             calcos.calcos(item, outdir=self.x1d_outdir, verbosity=0)
             calibrated.append(item)
             calibrated.append(other)

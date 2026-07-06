@@ -245,7 +245,7 @@ def get_aperture_region(cenwave=1291, aperture="PSA", segments=["FUVA", "FUVB"],
                                 "DATE-OBS": today, "TIME-OBS": "00:00:00",
                                 "CENWAVE": cenwave},
                             reftypes=["xtractab"], context=current_pmap, observatory="hst")
-            lp_1dx = os.path.join(os.environ["CRDS_PATH"], "references/hst/", 
+            lp_1dx = os.path.join(os.environ["CRDS_PATH"], "references/hst/cos/", 
                                   crds_1dx["xtractab"])
     
             data_1dx = fits.getdata(lp_1dx, 1)

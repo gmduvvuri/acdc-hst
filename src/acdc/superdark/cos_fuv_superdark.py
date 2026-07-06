@@ -470,7 +470,7 @@ class Superdark():
         return final_image
 
 
-    def bin_superdark(self, bin_x, bin_y, pha_bins=None, outfile=None, verbose=True, writefile=True, makeplots=True):
+    def bin_superdark(self, bin_x, bin_y, pha_bins=None, outfile=None, verbose=True, writefile=True, makeplots=False):
         
         # Bin across PHA
         self.pha_images = {}
@@ -479,7 +479,7 @@ class Superdark():
                 if b not in self.pha_bins:
                     raise IndexError(f"Previous PHA bins not compatible with new bins, {self.pha_bins} vs {pha_bins}")
             superdarks = []
-            inds = np.nonzero(np.in1d(self.pha_bins, pha_bins))[0]
+            inds = np.nonzero(np.isin(self.pha_bins, pha_bins))[0]
             for i in range(len(inds)-1):
                 superdark = self.superdarks[i]
                 for j in range(i+1, inds[i+1]):
